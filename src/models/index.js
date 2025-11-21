@@ -1,34 +1,34 @@
+const fs = require('fs');
+const path = require('path');
 const { Sequelize } = require('sequelize');
-const config = require('../config/database');
+const dbConfig = require('../config/database');
 
-const env = process.env.NODE_ENV || 'development';
-const dbConfig = config[env];
-
-let sequelize;
-if (dbConfig.url) {
-  sequelize = new Sequelize(dbConfig.url, {
-    ...dbConfig,
-    dialect: 'postgres'
-  });
-} else {
-  sequelize = new Sequelize(
-    dbConfig.database,
-    dbConfig.username,
-    dbConfig.password,
-    dbConfig
-  );
-}
-
+const basename = path.basename(__filename);
 const db = {};
 
-// Importar models
-db.User = require('./User')(sequelize, Sequelize.DataTypes);
-db.Recipe = require('./Recipe')(sequelize, Sequelize.DataTypes);
-db.Ingredient = require('./Ingredient')(sequelize, Sequelize.DataTypes);
-db.Category = require('./Category')(sequelize, Sequelize.DataTypes);
-db.Rating = require('./Rating')(sequelize, Sequelize.DataTypes);
+const sequelize = new Sequelize(dbConfig.url, {
+  dialect: dbConfig.dialect,
+  logging: dbConfig.logging,
+  dialectOptions: dbConfig.dialectOptions,
+});
 
-// Definir relacionamentos
+fs
+  .readdirSync(__dirname)
+  .filter(file => {
+    return (
+      file.indexOf('.') !== 0 &&
+      file !== basename &&
+      file.slice(-3) === '.js'
+    );
+  })
+  .forEach(file => {
+    const model = require(path.join(__dirname, file))(
+      sequelize,
+      Sequelize.DataTypes,
+    );
+    db[model.name] = model;
+  });
+
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
@@ -39,4 +39,3 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
-
