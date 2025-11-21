@@ -579,9 +579,14 @@ A maioria dos endpoints requer autenticação via JWT. Para usar:
 
 ISC
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
-Desenvolvido como trabalho acadêmico para Tópicos Especiais em Tecnologia.
+EVERSON TIBOLLA BENEDETTI
+EDUARDO AUGUSTO COLTRO
+DIOGO VAZ DE CHAVES
+GABRIEL VANZ DA SILVA
+FERNANDO FERRARIN DA SILVA
+GABRIEL VINICIUS DE OLIVEIRA
 
 ---
 
